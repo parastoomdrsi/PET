@@ -33,6 +33,8 @@ def add_expense(request):
                 for error in errors:
                     messages.error(request, error)
 
+    if request.POST.get("source") == "transactions":
+        return redirect("transactions")
     return redirect("dashboard")
         
 
