@@ -1,0 +1,26 @@
+a {
+    color: #29263A; 
+}
+
+.container{
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: 1.7px solid #EAE7F0;  
+    color: #29263A;
+    padding: 30px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 80%;
+    max-width: 800px;
+}
+
+.btn {
+    background-color: #8B7BC8 ;
+    color: #FFFFFF;
+    width: 100%;
+    border-radius: 20px;
+}
+
+.form input {
+    border-radius: 20px;
+}

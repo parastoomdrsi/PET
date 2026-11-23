@@ -1,0 +1,557 @@
+/* =========================
+   Theme
+========================= */
+
+:root {
+    --primary: #FFFFFF;
+    --primary-light: #5145B5;
+    --primary-hover: #40349E;
+    --primary-soft: #F0EDFA;
+
+    --bg-color: #F8F7FC;
+    --surface: #1E2A47;
+    --text-color: #FFFFFF;
+    --text-muted: #9692A8;
+    --border-color: #EAE7F0;
+
+    --income: #66A98A;
+    --expense: #D98291;
+    --delete-text: #A53651;
+    --delete-bg: #F9EDEF;
+    --delete-hover: #F2DCE2;
+}
+
+/* =========================
+   Base & Layout
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 30px;
+}
+
+/* =========================
+   Sidebar
+========================= */
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 250px;
+
+    width: 250px;
+    height: 100vh;
+    padding: 30px 18px;
+    overflow-y: auto;
+
+    background-color: var(--surface);
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar-brand {
+    padding: 0 12px;
+    margin-bottom: 45px;
+}
+
+.sidebar-brand h4 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-menu a {
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.sidebar-menu a.active {
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+}
+
+.sidebar-logout {
+    width: fit-content;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--expense, #D98291);
+    color: var(--surface, #1E2A47);
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sidebar-logout:hover {
+    background-color: var(--delete-hover, #F2DCE2);
+}
+
+.sidebar-logout:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+/* =========================
+   Buttons: Shared States
+========================= */
+
+.pet-btn-primary,
+.pet-btn-delete,
+.pet-btn-cancel {
+    --bs-btn-color: var(--pet-color);
+    --bs-btn-bg: var(--pet-bg);
+    --bs-btn-border-color: var(--pet-bg);
+
+    --bs-btn-hover-color: var(--pet-color);
+    --bs-btn-hover-bg: var(--pet-hover);
+    --bs-btn-hover-border-color: var(--pet-hover);
+
+    --bs-btn-active-color: var(--pet-color);
+    --bs-btn-active-bg: var(--pet-hover);
+    --bs-btn-active-border-color: var(--pet-hover);
+
+    --bs-btn-disabled-color: var(--pet-color);
+    --bs-btn-disabled-bg: var(--pet-bg);
+    --bs-btn-disabled-border-color: var(--pet-bg);
+
+    --bs-btn-focus-shadow-rgb: 81, 69, 181;
+}
+
+/* Primary */
+
+.pet-btn-primary {
+    --pet-color: var(--primary);
+    --pet-bg: var(--primary-light);
+    --pet-hover: var(--primary-hover);
+
+    background-color: var(--pet-bg);
+    border-color: var(--pet-bg);
+    color: var(--pet-color);
+}
+
+.pet-btn-primary:hover {
+    background-color: var(--pet-hover);
+    border-color: var(--pet-hover);
+    color: var(--pet-color);
+}
+
+/* Delete */
+
+.pet-btn-delete {
+    --pet-color: var(--delete-text);
+    --pet-bg: var(--delete-bg);
+    --pet-hover: var(--delete-hover);
+}
+
+/* Cancel */
+
+.pet-btn-cancel {
+    --pet-color: #514B65;
+    --pet-bg: var(--border-color);
+    --pet-hover: #DED9E9;
+}
+
+/* Primary Outline */
+
+.pet-btn-primary-outline {
+    background-color: var(--primary);
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+.pet-btn-primary-outline:hover,
+.pet-btn-primary-outline:active {
+    background-color: var(--primary-soft);
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+.pet-btn-primary-outline:focus-visible {
+    outline: 3px solid #DED9F3;
+    outline-offset: 2px;
+}
+
+/* Delete Outline */
+
+.pet-btn-delete-outline {
+    background-color: var(--primary);
+    border: 1px solid var(--expense);
+    color: var(--delete-text);
+}
+
+.pet-btn-delete-outline:hover,
+.pet-btn-delete-outline:active {
+    background-color: var(--delete-bg);
+    border-color: var(--delete-text);
+    color: var(--delete-text);
+}
+
+.pet-btn-delete-outline:focus-visible {
+    outline: 3px solid var(--delete-hover);
+    outline-offset: 2px;
+}
+
+/* =========================
+   Budget Header
+========================= */
+
+.budget-header {
+    padding: 12px 0;
+}
+
+.budget-title {
+    margin-bottom: 8px;
+    color: var(--surface);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.budget-subtitle {
+    margin-bottom: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.budget-add-btn {
+    flex-shrink: 0;
+    padding: clamp(8px, 1vw, 12px) clamp(10px, 1.5vw, 22px);
+    border-radius: 10px;
+
+    background-color: var(--primary-light);
+    color: var(--primary);
+
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.budget-add-btn:hover {
+    background-color: var(--primary-hover);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Categories
+========================= */
+
+.pet-category-count {
+    background-color: var(--primary-soft);
+    color: var(--primary-light);
+}
+
+/* =========================
+   Modals
+========================= */
+
+.modal {
+    --bs-modal-bg: var(--primary);
+    --bs-modal-color: var(--surface);
+    --bs-modal-border-color: var(--border-color);
+    --bs-modal-border-radius: 18px;
+    --bs-modal-header-border-color: var(--border-color);
+    --bs-modal-footer-border-color: var(--border-color);
+}
+
+.modal-content {
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(30, 42, 71, 0.15);
+}
+
+.modal-header {
+    padding: 18px 24px;
+    background-color: var(--primary-soft);
+}
+
+.modal-title {
+    color: var(--primary-light);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    gap: 8px;
+    padding: 16px 24px;
+    background-color: var(--bg-color);
+}
+
+/* Modal Fields */
+
+.modal .form-label {
+    color: var(--surface);
+    font-weight: 500;
+}
+
+.modal .form-control,
+.modal .form-select {
+    padding: 10px 12px;
+    border-color: var(--border-color);
+    border-radius: 10px;
+}
+
+.modal .form-control:focus,
+.modal .form-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(81, 69, 181, 0.15);
+}
+
+/* Modal Buttons */
+
+.modal .btn {
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* =========================
+   Floating Messages
+========================= */
+
+.pet-messages {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1090;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    width: min(360px, calc(100% - 32px));
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+    pointer-events: none;
+}
+
+.pet-message {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+
+    background-color: var(--primary);
+    color: var(--surface);
+
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-light);
+    border-radius: 12px;
+
+    box-shadow: 0 8px 24px rgba(30, 42, 71, 0.12);
+    pointer-events: auto;
+}
+
+.pet-message span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.pet-message .btn-close {
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+.pet-message.success {
+    border-left-color: var(--primary-light);
+}
+
+.pet-message.error {
+    border-left-color: #B94360;
+}
+
+.pet-message.warning {
+    border-left-color: var(--expense);
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 576px) {
+    .budget-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .budget-add-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .pet-messages {
+        top: 16px;
+        right: 16px;
+    }
+}
+
+@keyframes message-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pet-message {
+    animation: message-in 0.3s ease-out;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.pet-message.is-hiding {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.budget-progress {
+    display: block;
+    height: 10px;
+    accent-color: currentColor;
+}
+
+.budget-progress.budget-near-limit {
+    color: var(--expense);
+}
+
+.budget-progress.budget-progress-warning {
+    appearance: none;
+    border: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: var(--border-color);
+}
+
+.budget-progress-warning::-webkit-progress-bar {
+    background-color: var(--border-color);
+}
+
+.budget-progress-warning::-webkit-progress-value {
+    background-color: var(--expense);
+}
+
+.budget-progress-warning::-moz-progress-bar {
+    background-color: var(--expense);
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field .form-control {
+    width: 100%;
+    padding-right: 4rem;
+}
+
+.password-field #togglePassword {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 2px 6px;
+    border: 0;
+    background: transparent;
+    color: var(--primary-light, #5145B5);
+    font-size: 14px;
+    cursor: pointer;
+}
+#togglePassword {
+    color: #5145B5;
+    font-size: 14px;
+}
+
+.budget-usage {
+    min-width: 150px;
+    --usage-fill: var(--income);
+    --usage-bg: #e8f4ed;
+    --usage-text: #28563d;
+}
+
+.budget-usage[data-status="warning"] {
+    --usage-fill: var(--expense);
+    --usage-bg: var(--delete-bg);
+    --usage-text: var(--delete-text);
+}
+
+.budget-usage[data-status="limit"] {
+    --usage-fill: var(--delete-text);
+    --usage-bg: var(--delete-hover);
+    --usage-text: var(--delete-text);
+}
+
+.budget-usage-bar {
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 8px;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--border-color);
+}
+
+.budget-usage-bar::-webkit-progress-bar {
+    background-color: var(--border-color);
+}
+
+.budget-usage-bar::-webkit-progress-value {
+    background-color: var(--usage-fill);
+}
+
+.budget-usage-bar::-moz-progress-bar {
+    background-color: var(--usage-fill);
+}
+
+.budget-usage .budget-usage-badge {
+    background-color: var(--usage-bg);
+    color: var(--usage-text);
+}
