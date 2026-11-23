@@ -345,6 +345,7 @@ def register(request):
     return render(request, "expenses/register.html")
 
 
+@login_required
 def dashboard(request):
     today = timezone.localdate()
 
@@ -417,4 +418,5 @@ def transactions(request):
     )
     return render(request, "expenses/transactions.html", {
         "expenses": expenses,
+        "categories": Category.objects.filter(user=request.user).order_by("name"),
     })

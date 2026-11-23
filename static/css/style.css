@@ -108,6 +108,27 @@ body {
     margin-top: auto;
 }
 
+.sidebar-logout {
+    width: fit-content;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--expense, #D98291);
+    color: var(--surface, #1E2A47);
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sidebar-logout:hover {
+    background-color: var(--delete-hover, #F2DCE2);
+}
+
+.sidebar-logout:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
 /* =========================
    Buttons: Shared States
 ========================= */
@@ -456,4 +477,81 @@ body {
 
 .budget-progress-warning::-moz-progress-bar {
     background-color: var(--expense);
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field .form-control {
+    width: 100%;
+    padding-right: 4rem;
+}
+
+.password-field #togglePassword {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 2px 6px;
+    border: 0;
+    background: transparent;
+    color: var(--primary-light, #5145B5);
+    font-size: 14px;
+    cursor: pointer;
+}
+#togglePassword {
+    color: #5145B5;
+    font-size: 14px;
+}
+
+.budget-usage {
+    min-width: 150px;
+    --usage-fill: var(--income);
+    --usage-bg: #e8f4ed;
+    --usage-text: #28563d;
+}
+
+.budget-usage[data-status="warning"] {
+    --usage-fill: var(--expense);
+    --usage-bg: var(--delete-bg);
+    --usage-text: var(--delete-text);
+}
+
+.budget-usage[data-status="limit"] {
+    --usage-fill: var(--delete-text);
+    --usage-bg: var(--delete-hover);
+    --usage-text: var(--delete-text);
+}
+
+.budget-usage-bar {
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 8px;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--border-color);
+}
+
+.budget-usage-bar::-webkit-progress-bar {
+    background-color: var(--border-color);
+}
+
+.budget-usage-bar::-webkit-progress-value {
+    background-color: var(--usage-fill);
+}
+
+.budget-usage-bar::-moz-progress-bar {
+    background-color: var(--usage-fill);
+}
+
+.budget-usage .budget-usage-badge {
+    background-color: var(--usage-bg);
+    color: var(--usage-text);
 }

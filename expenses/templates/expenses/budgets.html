@@ -1,6 +1,6 @@
 {% extends 'expenses/base.html' %}
 
-{% load static %}
+{% load static i18n %}
 
 {% block title %}Budgets | PET{% endblock %}
 
@@ -24,7 +24,7 @@
     <div class="budget-header d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="budget-title">My Budgets</h2>
+            <h2 class="budget-title">{% translate "My Budgets" %}</h2>
             <p class="budget-subtitle">
                 Manage your monthly budgets and track your spending.
             </p>
@@ -60,11 +60,11 @@
                             <th>Budget</th>
                             <th>Spent</th>
                             <th>Remaining</th>
-                            <th>Progress</th>
-                            <th>Status</th>
+                            <th>Usage</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {% for item in budget_status %}
                         <tr>
@@ -81,24 +81,29 @@
                                     {{ item.remaining|floatformat:0 }}
                                 </span>
                             </td>
-                            <td style="min-width: 120px;">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar 
-                                            {% if item.percentage >= 100 %}bg-danger
-                                            {% elif item.percentage >= 80 %}bg-warning
-                                            {% else %}bg-success{% endif %}">
-                                        {{ item.percentage|default:0 }}%
-                                    </div>
+                            <td class="budget-usage"
+                                data-status="{% if item.spent >= item.budget.amount %}limit{% elif item.percentage >= 80 %}warning{% else %}normal{% endif %}">
+
+                                <progress class="budget-usage-bar"
+                                    value="{{ item.percentage|default:0|floatformat:'2u' }}" max="100"
+                                    aria-label="{{ item.budget.category.name }} budget usage">
+                                </progress>
+
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <small>{{ item.percentage|default:0|floatformat:"-1" }}%</small>
+
+                                    <span class="badge budget-usage-badge">
+                                        {% if item.spent > item.budget.amount %}
+                                        Exceeded
+                                        {% elif item.spent == item.budget.amount %}
+                                        Limit reached
+                                        {% elif item.percentage >= 80 %}
+                                        Almost Full
+                                        {% else %}
+                                        On Track
+                                        {% endif %}
+                                    </span>
                                 </div>
-                            </td>
-                            <td>
-                                {% if item.percentage >= 100 %}
-                                <span class="badge bg-danger">Exceeded!</span>
-                                {% elif item.percentage >= 80 %}
-                                <span class="badge bg-warning text-dark">Almost Full</span>
-                                {% else %}
-                                <span class="badge bg-success">On Track</span>
-                                {% endif %}
                             </td>
                             <td>
                                 <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
@@ -118,7 +123,7 @@
                         <tr>
                             <td colspan="8" class="text-center text-muted py-4">
                                 No budgets created yet.
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                <button class="btn btn-sm pet-btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#addBudgetModal">
                                     Create your first budget
                                 </button>

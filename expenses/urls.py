@@ -1,11 +1,11 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-
+from django.views.generic import RedirectView
 from . import views
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path("", RedirectView.as_view(pattern_name="dashboard", permanent=False), name="home"),    
     path('delete/<int:expense_id>/', views.delete_expense, name='delete_expense'),
     path('edit/<int:expense_id>/', views.edit_expense, name='edit_expense'),
     path('login/', auth_views.LoginView.as_view(template_name ='expenses/login.html'), name='login'),

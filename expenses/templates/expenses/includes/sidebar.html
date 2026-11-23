@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!-- Sidebar -->
 <aside class="sidebar">
 
@@ -9,32 +11,45 @@
 
         <a href="{% url 'dashboard' %}"
             class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-            Dashboard
+            {% translate "Dashboard" %}
         </a>
 
         <a href="{% url 'transactions' %}">
-            Transactions
+            {% translate "Transactions" %}
         </a>
 
         <a href="{% url 'categories' %}">
-            Categories
+            {% translate "Categories" %}
         </a>
 
         <a href="{% url 'manage_budgets' %}"
             class="{% if request.resolver_match.url_name == 'manage_budgets' %}active{% endif %}">
-            Budgets
-        </a>
-
-        <a href="#">
-            Settings
+            {% translate "Budgets" %}
         </a>
 
     </nav>
 
-    <div class="sidebar-footer">
+    <div class="sidebar-footer d-flex flex-row-reverse justify-content-between align-items-center" dir="ltr"> 
+        {% get_current_language as current_language %}
+
+        <form method="post" action="{% url 'set_language' %}" class="m-0">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+            {% if current_language == "fa" %}
+            <button type="submit" name="language" value="en" class="btn btn-sm btn-outline-light" lang="en">
+                English
+            </button>
+            {% else %}
+            <button type="submit" name="language" value="fa" class="btn btn-sm btn-outline-light" lang="fa">
+                فارسی
+            </button>
+            {% endif %}
+        </form>
+
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button type="submit">Logout</button>
+            <button type="submit" class="sidebar-logout">{% translate "Log out" %}</button>
         </form>
     </div>
 

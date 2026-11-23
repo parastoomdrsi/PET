@@ -86,3 +86,25 @@ document.querySelectorAll('.pet-message').forEach(message => {
         }, 4000);
     }
 });
+
+const passwordInput = document.getElementById("loginPassword");
+const toggleButton = document.getElementById("togglePassword");
+
+if (passwordInput && toggleButton) {
+    toggleButton.addEventListener("click", () => {
+        const showPassword = passwordInput.type === "password";
+
+        passwordInput.type = showPassword ? "text" : "password";
+        toggleButton.textContent = showPassword ? "Hide" : "Show";
+    });
+}
+
+document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+    const input = document.getElementById(button.getAttribute("aria-controls"));
+
+    button.addEventListener("click", () => {
+        const showPassword = input.type === "password";
+        input.type = showPassword ? "text" : "password";
+        button.textContent = showPassword ? "Hide" : "Show";
+    });
+});

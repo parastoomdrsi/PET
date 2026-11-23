@@ -1,22 +1,25 @@
 {% extends 'expenses/base.html' %}
-{% load static %}
-
+{% load static i18n %}
 {% block title %}Transactions | PET{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
-    <h2 class="fw-bold mb-4">Transactions</h2>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <h2 class="fw-bold mb-4">Transactions</h2>
+
+        <button type="button" class="btn pet-btn-primary" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+            + Add Expense
+        </button>
+    </div>
+
 
     {% for expense in expenses %}
-    <div class="card shadow-sm mb-3 expense-card"
-         data-id="{{ expense.id }}"
-         data-edit-url="{% url 'edit_expense' expense.id %}"
-         data-delete-url="{% url 'delete_expense' expense.id %}"
-         data-title="{{ expense.title }}"
-         data-price="{{ expense.price|floatformat:'2u' }}"
-         data-category="{{ expense.category_id }}"
-         data-date="{{ expense.date|date:'Y-m-d' }}"
-         data-description="{{ expense.description|default_if_none:'' }}">
+    <div class="card shadow-sm mb-3 expense-card" data-id="{{ expense.id }}"
+        data-edit-url="{% url 'edit_expense' expense.id %}" data-delete-url="{% url 'delete_expense' expense.id %}"
+        data-title="{{ expense.title }}" data-price="{{ expense.price|floatformat:'2u' }}"
+        data-category="{{ expense.category_id }}" data-date="{{ expense.date|date:'Y-m-d' }}"
+        data-description="{{ expense.description|default_if_none:'' }}">
 
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-start">
@@ -39,28 +42,30 @@
             </div>
 
             <div class="d-flex gap-2 justify-content-end mt-3">
-                <button type="button"
-                        class="btn btn-sm btn-outline-secondary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editExpenseModal">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#editExpenseModal">
                     Edit
                 </button>
 
-                <button type="button"
-                        class="btn btn-sm pet-btn-delete-outline"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteExpenseModal">
+                <button type="button" class="btn btn-sm pet-btn-delete-outline" data-bs-toggle="modal"
+                    data-bs-target="#deleteExpenseModal">
                     Delete
                 </button>
             </div>
         </div>
     </div>
+    {% empty %}
+    <div class="text-center py-4">
+        <p class="fw-semibold mb-1">{% translate "No expenses recorded yet." %}</p>
+        <p class="text-muted mb-0">
+            {% translate "Use the Add Expense button to record your first expense." %}
+        </p>
+    </div>
     {% endfor %}
 </div>
 
 <!-- Edit Expense -->
-<div class="modal fade" id="editExpenseModal" tabindex="-1"
-     aria-labelledby="editExpenseLabel" aria-hidden="true">
+<div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseLabel" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" id="editExpenseForm" class="modal-content">
             {% csrf_token %}
@@ -68,21 +73,18 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="editExpenseLabel">Edit Expense</h5>
-                <button type="button" class="btn-close"
-                        data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="editExpenseTitle" class="form-label">Title</label>
-                    <input type="text" name="title" id="editExpenseTitle"
-                           class="form-control" required>
+                    <input type="text" name="title" id="editExpenseTitle" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="editExpensePrice" class="form-label">Price</label>
-                    <input type="number" name="price" id="editExpensePrice"
-                           class="form-control" step="0.01" required>
+                    <input type="number" name="price" id="editExpensePrice" class="form-control" step="0.01" required>
                 </div>
 
                 <div class="mb-3">
@@ -101,8 +103,7 @@
 
                 <div>
                     <label for="editExpenseDescription" class="form-label">Description</label>
-                    <textarea name="description" id="editExpenseDescription"
-                              class="form-control" rows="2"></textarea>
+                    <textarea name="description" id="editExpenseDescription" class="form-control" rows="2"></textarea>
                 </div>
             </div>
 
@@ -117,8 +118,7 @@
 </div>
 
 <!-- Delete Expense -->
-<div class="modal fade" id="deleteExpenseModal" tabindex="-1"
-     aria-labelledby="deleteExpenseLabel" aria-hidden="true">
+<div class="modal fade" id="deleteExpenseModal" tabindex="-1" aria-labelledby="deleteExpenseLabel" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" id="deleteExpenseForm" class="modal-content">
             {% csrf_token %}
@@ -126,8 +126,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteExpenseLabel">Delete Expense</h5>
-                <button type="button" class="btn-close"
-                        data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -145,6 +144,62 @@
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="addExpenseLabel">Add Expense</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" action="{% url 'add_expense' %}">
+                    {% csrf_token %}
+                    <div class="mb-3 mt-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price:</label>
+                        <input type="number" class="form-control" id="price" placeholder="Enter price" name="price"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category:</label>
+                        <div class="input-group">
+                            <select class="form-select" name="category" id="categorySelect">
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date:</label>
+                        <input type="date" class="form-control" name="date" id="date" placeholder="Enter date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="Optional..."
+                            id="description"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn pet-btn-primary">Add Expense</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
