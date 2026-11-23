@@ -1,0 +1,41 @@
+<!-- Sidebar -->
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+        <h4>Personal Expense Tracker</h4>
+    </div>
+
+    <nav class="sidebar-menu">
+
+        <a href="{% url 'dashboard' %}"
+            class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'transactions' %}">
+            Transactions
+        </a>
+
+        <a href="{% url 'categories' %}">
+            Categories
+        </a>
+
+        <a href="{% url 'manage_budgets' %}"
+            class="{% if request.resolver_match.url_name == 'manage_budgets' %}active{% endif %}">
+            Budgets
+        </a>
+
+        <a href="#">
+            Settings
+        </a>
+
+    </nav>
+
+    <div class="sidebar-footer">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+</aside>

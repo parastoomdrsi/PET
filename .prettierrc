@@ -1,0 +1,16 @@
+{
+  "plugins": ["prettier-plugin-django-template"],
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "django-template"
+      }
+    }
+  ],
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": false,
+  "printWidth": 100
+}

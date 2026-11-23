@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "prettier": "^3.9.3",
+    "prettier-plugin-django-template": "^0.1.1"
+  }
+}

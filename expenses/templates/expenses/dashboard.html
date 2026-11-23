@@ -1,0 +1,171 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Dashboard | PET{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <h2 class="fw-bold mb-0">Dashboard</h2>
+
+        <button type="button" class="btn pet-btn-primary" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+            + Add Expense
+        </button>
+    </div>
+    <p class="text-muted mb-4">
+        Welcome back! Here's your financial overview.
+    </p>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card p-3 shadow-sm h-100">
+                <p class="text-muted">Total Expenses</p>
+                <h3>{{ total_expenses }}</h3>
+                <small>This month</small>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card p-3 shadow-sm h-100">
+                <p class="text-muted">Total Budget</p>
+                <h3>{{ total_budget }}</h3>
+                <small>This month</small>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card p-3 shadow-sm h-100">
+                <p class="text-muted">Remaining Budget</p>
+                <h3>{{ remaining_budget }}</h3>
+                <small>Available to spend</small>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card p-3 shadow-sm h-100">
+                <p class="text-muted">Transactions</p>
+                <h3>{{ total_transactions }}</h3>
+                <small>This month</small>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-lg-5 ms-lg-auto">
+            <div class="card mt-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold">Budget Status</h6>
+                    <a href="{% url 'manage_budgets' %}" class="btn btn-sm pet-btn-primary-outline">
+                        Manage All
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    {% for item in budget_status %}
+                    <div class="{% if not forloop.last %}mb-3{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <span class="fw-semibold">{{ item.budget.category.name }}</span>
+                            <span>
+                                {{ item.spent|floatformat:0 }} / {{ item.budget.amount|floatformat:0 }}
+                            </span>
+                        </div>
+
+                        <div class="progress mt-2" style="height: 10px;" role="progressbar"
+                            aria-label="{{ item.budget.category.name }} budget usage"
+                            aria-valuenow="{% if item.percentage >= 100 %}100{% else %}{{ item.percentage|default:0|floatformat:'2u' }}{% endif %}"
+                            aria-valuemin="0" aria-valuemax="100">
+
+                            <!-- <div class="progress-bar"
+                                style="width: {{ item.percentage|default:0|floatformat:'2u' }}%;
+                                max-width: 100%;
+                                background-color: {% if item.spent >= item.budget.amount %}var(--bs-danger){% elif item.percentage >= 80 %}#D98291{% else %}var(--income){% endif %};">
+                            </div> -->
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mt-1">
+                            <small class="text-body-secondary">
+                                {{ item.percentage|default:0|floatformat:"-1" }}%
+                            </small>
+
+                            {% if item.spent > item.budget.amount %}
+                            <span class="badge bg-danger">Exceeded</span>
+                            {% elif item.spent == item.budget.amount %}
+                            <span class="badge bg-danger">Limit reached</span>
+                            {% elif item.percentage >= 80 %}
+                            <span class="badge budget-progress-warning">Almost Full</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-2">
+                        No budgets set for this month.
+                        <a href="{% url 'manage_budgets' %}">Create one</a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="addExpenseLabel">Add Expense</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" action="{% url 'add_expense' %}">
+                    {% csrf_token %}
+                    <div class="mb-3 mt-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price:</label>
+                        <input type="number" class="form-control" id="price" placeholder="Enter price" name="price"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category:</label>
+                        <div class="input-group">
+                            <select class="form-select" name="category" id="categorySelect">
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date:</label>
+                        <input type="date" class="form-control" name="date" id="date" placeholder="Enter date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="Optional..."
+                            id="description"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn pet-btn-primary">Add Expense</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

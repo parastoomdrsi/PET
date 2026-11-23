@@ -1,0 +1,152 @@
+{% extends 'expenses/base.html' %}
+{% load static %}
+
+{% block title %}Transactions | PET{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h2 class="fw-bold mb-4">Transactions</h2>
+
+    {% for expense in expenses %}
+    <div class="card shadow-sm mb-3 expense-card"
+         data-id="{{ expense.id }}"
+         data-edit-url="{% url 'edit_expense' expense.id %}"
+         data-delete-url="{% url 'delete_expense' expense.id %}"
+         data-title="{{ expense.title }}"
+         data-price="{{ expense.price|floatformat:'2u' }}"
+         data-category="{{ expense.category_id }}"
+         data-date="{{ expense.date|date:'Y-m-d' }}"
+         data-description="{{ expense.description|default_if_none:'' }}">
+
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h5 class="fw-bold mb-1 expense-title">{{ expense.title }}</h5>
+
+                    <span class="badge bg-secondary expense-category">
+                        {{ expense.category.name }}
+                    </span>
+
+                    <small class="d-block text-muted mt-2">
+                        {{ expense.created_at|date:"m/d/Y" }}
+                        {{ expense.created_at|time:"g:i A" }}
+                    </small>
+                </div>
+
+                <div class="text-end me-4">
+                    <h4 class="fw-bold text-success expense-price">${{ expense.price }}</h4>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-end mt-3">
+                <button type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editExpenseModal">
+                    Edit
+                </button>
+
+                <button type="button"
+                        class="btn btn-sm pet-btn-delete-outline"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteExpenseModal">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Edit Expense -->
+<div class="modal fade" id="editExpenseModal" tabindex="-1"
+     aria-labelledby="editExpenseLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="editExpenseForm" class="modal-content">
+            {% csrf_token %}
+            <input type="hidden" name="source" value="transactions">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editExpenseLabel">Edit Expense</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="editExpenseTitle" class="form-label">Title</label>
+                    <input type="text" name="title" id="editExpenseTitle"
+                           class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editExpensePrice" class="form-label">Price</label>
+                    <input type="number" name="price" id="editExpensePrice"
+                           class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editExpenseCategory" class="form-label">Category</label>
+                    <select name="category" id="editExpenseCategory" class="form-select" required>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editExpenseDate" class="form-label">Date</label>
+                    <input type="date" name="date" id="editExpenseDate" class="form-control">
+                </div>
+
+                <div>
+                    <label for="editExpenseDescription" class="form-label">Description</label>
+                    <textarea name="description" id="editExpenseDescription"
+                              class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn pet-btn-cancel" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="submit" class="btn pet-btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Expense -->
+<div class="modal fade" id="deleteExpenseModal" tabindex="-1"
+     aria-labelledby="deleteExpenseLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="deleteExpenseForm" class="modal-content">
+            {% csrf_token %}
+            <input type="hidden" name="source" value="transactions">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteExpenseLabel">Delete Expense</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="mb-0">
+                    Are you sure you want to delete <strong id="deleteExpenseTitle"></strong>?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn pet-btn-cancel" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="submit" class="btn pet-btn-delete">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/transactions.js' %}"></script>
+{% endblock %}
